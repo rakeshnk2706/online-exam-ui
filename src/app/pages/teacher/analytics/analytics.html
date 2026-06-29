@@ -1,0 +1,95 @@
+<app-navbar></app-navbar>
+
+<div class="layout">
+  <app-sidebar></app-sidebar>
+
+  <div class="content">
+    <div class="page-header">
+      <h2>Exam Analytics</h2>
+      <p>Exam ID: {{ examId }}</p>
+    </div>
+
+    <div *ngIf="loading" class="loading">Loading Analytics...</div>
+
+    <div *ngIf="!loading && analytics" class="analytics-wrapper">
+      <div class="summary-grid">
+        <div class="summary-card">
+          <span class="label">Total Attempts</span>
+          <h3>{{ analytics.totalAttempts }}</h3>
+        </div>
+
+        <div class="summary-card">
+          <span class="label">Average Score</span>
+          <h3>{{ analytics.averageScore | number: '1.2-2' }}</h3>
+        </div>
+
+        <div class="summary-card">
+          <span class="label">Highest Score</span>
+          <h3>{{ analytics.highestScore }}</h3>
+        </div>
+
+        <div class="summary-card">
+          <span class="label">Lowest Score</span>
+          <h3>{{ analytics.lowestScore }}</h3>
+        </div>
+      </div>
+
+      <div class="analytics-section">
+        <div class="progress-card">
+          <h3>Pass / Fail Summary</h3>
+
+          <div class="progress-row">
+            <div class="progress-label">
+              <span>Pass</span>
+              <strong>{{ analytics.passCount }} Students</strong>
+            </div>
+
+            <div class="progress-bar">
+              <div class="progress-fill pass-fill" [style.width.%]="passPercentage"></div>
+            </div>
+
+            <span class="percent"> {{ passPercentage }}% </span>
+          </div>
+
+          <div class="progress-row">
+            <div class="progress-label">
+              <span>Fail</span>
+              <strong>{{ analytics.failCount }} Students</strong>
+            </div>
+
+            <div class="progress-bar">
+              <div class="progress-fill fail-fill" [style.width.%]="failPercentage"></div>
+            </div>
+
+            <span class="percent"> {{ failPercentage }}% </span>
+          </div>
+        </div>
+
+        <div class="donut-card">
+          <h3>Result Distribution</h3>
+
+          <div
+            class="donut"
+            [style.background]="
+              'conic-gradient(#2e7d32 0% ' +
+              passPercentage +
+              '%, #d32f2f ' +
+              passPercentage +
+              '% 100%)'
+            "
+          >
+            <div class="donut-center">
+              <strong>{{ passPercentage }}%</strong>
+              <span>Pass</span>
+            </div>
+          </div>
+
+          <div class="legend">
+            <span><b class="green"></b> Pass</span>
+            <span><b class="red"></b> Fail</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+.layout {
+
+    display: flex;
+}
+
+.content {  
+    flex: 1;
+    padding: 25px;
+    background: #f5f7fa;
+}
+
+.loading {
+    background: white;
+    padding: 25px;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.review-card {
+    background: white;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.review-card h3 {
+    margin-top: 0;
+    color: #1976d2;
+}
+
+.review-card p {
+    margin: 10px 0;
+}
+
+.status {
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+}
+
+.correct {
+    background: #2e7d32;
+}
+
+.wrong {
+    background: #d32f2f;
+}
+
+.unanswered {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}

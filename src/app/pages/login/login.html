@@ -1,0 +1,39 @@
+<div class="login-container">
+
+    <mat-card class="login-card">
+
+        <h2>Online Exam Login</h2>
+
+        @if(errorMessage){
+
+        <div class="error-box">
+            {{errorMessage}}
+        </div>
+
+        }
+
+        <mat-form-field appearance="outline">
+
+            <mat-label>Username</mat-label>
+
+            <input matInput [(ngModel)]="username">
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+
+            <mat-label>Password</mat-label>
+
+            <input matInput type="password" [(ngModel)]="password">
+
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="login()">
+
+            Login
+
+        </button>
+
+    </mat-card>
+
+</div>

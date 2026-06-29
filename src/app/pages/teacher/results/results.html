@@ -1,0 +1,76 @@
+<app-navbar></app-navbar>
+
+<div class="layout">
+  <app-sidebar></app-sidebar>
+
+  <div class="content">
+    <button class="refresh-btn" (click)="loadResults()" [disabled]="loading">
+      <span class="refresh-icon" [class.spin]="loading">
+        {{ loading ? '⟳' : '↻' }}
+      </span>
+
+      {{ loading ? 'Refreshing...' : 'Refresh Results' }}
+    </button>
+    <div class="page-header">
+      <div>
+        <h2>Exam Results</h2>
+        <p><strong>Exam:</strong> {{ exam.examName }}</p>
+
+        <p><strong>Class:</strong> {{ exam.className }}</p>
+
+        <p><strong>Total Marks:</strong> {{ exam.totalMarks }}</p>
+      </div>
+
+      <button class="export-btn" (click)="exportExcel()" [disabled]="results.length === 0">
+        Export Excel
+      </button>
+    </div>
+
+    <div *ngIf="loading" class="loading">Loading Results...</div>
+
+    <div *ngIf="!loading && results.length === 0" class="empty">No Results Found</div>
+
+    <table *ngIf="!loading && results.length > 0">
+      <thead>
+        <tr>
+          <th>Roll No</th>
+          <th>Student Name</th>
+          <th>Section</th>
+          <th>Score</th>
+          <th>Exam Status</th>
+          <th>Pass / Fail</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let result of results">
+          <td>{{ result.rollNo }}</td>
+
+          <td>{{ result.studentName }}</td>
+
+          <td>{{ result.sectionName }}</td>
+
+          <td>{{ result.marksObtained }} / {{ result.totalMarks }}</td>
+
+          <td>
+            <span class="badge" [class.completed]="result.examStatus === 'COMPLETED'" [class.in-progress]="result.examStatus === 'IN_PROGRESS'" [class.not-appeared]="result.examStatus === 'NOT_APPEARED'">
+              {{ result.examStatus }}
+            </span>
+          </td>
+          <td>
+            <span class="badge" [class.pass]="result.result === 'PASS'" [class.fail]="result.result === 'FAIL'" [class.pending]="result.result === 'PENDING'" [class.not-appeared]="result.result === 'NOT_APPEARED'">
+              {{ result.result }}
+            </span>
+          </td>
+          <td>
+            <button *ngIf="result.examStatus === 'IN_PROGRESS'" class="reset-btn" (click)="resetStudentExam(result.studentId)" title="Reset Student Exam">
+              <span class="reset-icon">↺</span>
+              Reset
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

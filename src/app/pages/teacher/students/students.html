@@ -1,0 +1,132 @@
+<app-navbar></app-navbar>
+
+<div class="layout">
+  <app-sidebar></app-sidebar>
+
+  <div class="content">
+    <div class="page-card">
+      <h2>Student Management</h2>
+
+      <div class="info-box">
+        <strong>Excel Format:</strong>
+        <ul>
+          <li>Roll No</li>
+          <li>Student Name</li>
+          <li>Class</li>
+          <li>Section</li>
+        </ul>
+      </div>
+
+      <div class="upload-box">
+        <label>Upload Student Excel</label>
+
+        <input type="file" accept=".xlsx,.xls" (change)="onFileSelected($event)" />
+
+        <button class="upload-btn" (click)="uploadStudents()">Upload Students</button>
+      </div>
+
+      <div class="message" *ngIf="message" [class.success]="success" [class.error]="!success">
+        {{ message }}
+      </div>
+    </div>
+
+    <div class="table-card">
+      <h3>Student List</h3>
+
+      <div *ngIf="loading" class="loading">Loading Students...</div>
+
+      <div *ngIf="!loading && filteredStudents.length === 0" class="empty">No Students Found</div>
+      <table *ngIf="!loading && filteredStudents.length > 0">
+        <thead>
+          <tr>
+            <th>Roll No</th>
+            <th>Student Name</th>
+            <th>Username</th>
+            <th>Class</th>
+            <th>Section</th>
+            <th>Password</th>
+          </tr>
+
+          <tr class="filter-row">
+            <th>
+              <input
+                type="text"
+                [(ngModel)]="rollNoFilter"
+                (input)="filterStudents()"
+                placeholder="Search"
+              />
+            </th>
+
+            <th>
+              <input
+                type="text"
+                [(ngModel)]="studentNameFilter"
+                (input)="filterStudents()"
+                placeholder="Search"
+              />
+            </th>
+
+            <th>
+              <input
+                type="text"
+                [(ngModel)]="usernameFilter"
+                (input)="filterStudents()"
+                placeholder="Search"
+              />
+            </th>
+
+            <th>
+              <input
+                type="text"
+                [(ngModel)]="classFilter"
+                (input)="filterStudents()"
+                placeholder="Search"
+              />
+            </th>
+
+            <th>
+              <input
+                type="text"
+                [(ngModel)]="sectionFilter"
+                (input)="filterStudents()"
+                placeholder="Search"
+              />
+            </th>
+
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let student of filteredStudents">
+            <td>{{ student.rollNo }}</td>
+
+            <td>{{ student.studentName }}</td>
+
+            <td>{{ student.username }}</td>
+
+            <td>{{ student.className }}</td>
+
+            <td>{{ student.section }}</td>
+
+            <td>
+              <span *ngIf="showPasswordMap[student.id]">
+                {{ student.password }}
+              </span>
+
+              <span *ngIf="!showPasswordMap[student.id]"> ******** </span>
+
+              <button
+                class="eye-btn"
+                (click)="togglePassword(student.id)"
+                [title]="showPasswordMap[student.id] ? 'Hide Password' : 'Show Password'"
+              >
+                {{ showPasswordMap[student.id] ? '🙈' : '👁️' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

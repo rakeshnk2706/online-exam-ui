@@ -1,0 +1,146 @@
+.layout {
+    display: flex;
+    min-height: calc(100vh - 60px);
+}
+
+.content {
+    flex: 1;
+    padding: 30px;
+    background: #f5f7fa;
+}
+
+.loading {
+    background: white;
+    padding: 25px;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.result-card {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .12);
+}
+
+.result-card h2 {
+    margin-bottom: 5px;
+}
+
+.result-card h3 {
+    color: #555;
+    margin-top: 0;
+}
+
+.status {
+    display: inline-block;
+    padding: 10px 30px;
+    border-radius: 30px;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+.pass {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.fail {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.score-box {
+    margin: 20px 0;
+}
+
+.score-box h1 {
+    font-size: 48px;
+    margin: 0;
+    color: #1976d2;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.summary-item {
+    background: #f4f6f9;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.summary-item label {
+    display: block;
+    font-size: 14px;
+    color: #666;
+}
+
+.summary-item strong {
+    display: block;
+    font-size: 26px;
+    margin-top: 8px;
+}
+
+.correct strong {
+    color: #2e7d32;
+}
+
+.wrong strong {
+    color: #c62828;
+}
+
+.unanswered strong {
+    color: #ef6c00;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 35px;
+    flex-wrap: wrap;
+}
+
+.actions button {
+    min-width: 180px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.dashboard-btn {
+    background: #1976d2;
+}
+
+.dashboard-btn:hover {
+    background: #1565c0;
+}
+
+.exam-btn {
+    background: #455a64;
+}
+
+.exam-btn:hover {
+    background: #37474f;
+}
+
+.review-btn {
+    background: #2e7d32;
+}
+
+.review-btn:hover {
+    background: #1b5e20;
+}

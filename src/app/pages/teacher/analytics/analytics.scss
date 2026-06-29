@@ -1,0 +1,191 @@
+.layout {
+  display: flex;
+  min-height: calc(100vh - 60px);
+}
+
+.content {
+  flex: 1;
+  padding: 25px;
+  background: #f5f7fa;
+}
+
+.page-header {
+  margin-bottom: 25px;
+}
+
+.page-header h2 {
+  margin: 0;
+}
+
+.page-header p {
+  margin: 5px 0 0;
+  color: #666;
+}
+
+.loading {
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.analytics-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.summary-card {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.summary-card .label {
+  color: #666;
+  font-size: 14px;
+}
+
+.summary-card h3 {
+  margin: 12px 0 0;
+  font-size: 32px;
+  color: #1976d2;
+}
+
+.analytics-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 25px;
+}
+
+.progress-card,
+.donut-card {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.progress-card h3,
+.donut-card h3 {
+  margin-top: 0;
+}
+
+.progress-row {
+  display: grid;
+  grid-template-columns: 160px 1fr 60px;
+  gap: 15px;
+  align-items: center;
+  margin: 22px 0;
+}
+
+.progress-label span {
+  display: block;
+  font-weight: 600;
+}
+
+.progress-label strong {
+  font-size: 13px;
+  color: #666;
+}
+
+.progress-bar {
+  height: 16px;
+  background: #e0e0e0;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 20px;
+}
+
+.pass-fill {
+  background: #2e7d32;
+}
+
+.fail-fill {
+  background: #d32f2f;
+}
+
+.percent {
+  font-weight: bold;
+}
+
+.donut-card {
+  text-align: center;
+}
+
+.donut {
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  margin: 25px auto;
+  position: relative;
+}
+
+.donut-center {
+  width: 115px;
+  height: 115px;
+  background: white;
+  border-radius: 50%;
+
+  position: absolute;
+  top: 37px;
+  left: 37px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.donut-center strong {
+  font-size: 28px;
+  color: #2e7d32;
+}
+
+.donut-center span {
+  font-size: 14px;
+  color: #666;
+}
+
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.legend b {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  margin-right: 6px;
+}
+
+.green {
+  background: #2e7d32;
+}
+
+.red {
+  background: #d32f2f;
+}
+
+@media (max-width: 900px) {
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .analytics-section {
+    grid-template-columns: 1fr;
+  }
+}

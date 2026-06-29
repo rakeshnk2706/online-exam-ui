@@ -1,0 +1,64 @@
+<div class="sidebar">
+  <ul>
+    <li *ngIf="auth.isTeacher()">
+      <a
+        routerLink="/teacher/dashboard"
+        routerLinkActive="active"
+        routerLinkActiveOptions="{ exact: true }"
+        class="menu-link"
+      >
+        <span>Dashboard</span>
+      </a>
+    </li>
+
+    <li *ngIf="auth.isTeacher()">
+      <a routerLink="/teacher/exams" routerLinkActive="active" class="menu-link">
+        <span>Exams</span>
+      </a>
+    </li>
+
+    <li *ngIf="auth.isTeacher()">
+      <a
+        routerLink="/teacher/create-exam"
+        routerLinkActive="active"
+        routerLinkActiveOptions="{ exact: true }"
+        class="menu-link"
+      >
+        <span>Create Exam</span>
+      </a>
+    </li>
+
+    <li *ngIf="auth.isTeacher() || auth.isAdmin()">
+      <a
+        routerLink="/teacher/students"
+        routerLinkActive="active"
+        routerLinkActiveOptions="{ exact: true }"
+        class="menu-link"
+      >
+        <span>Students</span>
+      </a>
+    </li>
+
+    <li *ngIf="auth.isStudent()">
+      <a
+        routerLink="/student/dashboard"
+        routerLinkActive="active"
+        routerLinkActiveOptions="{ exact: true }"
+        class="menu-link"
+      >
+        <span>Dashboard</span>
+      </a>
+    </li>
+
+    <li *ngIf="auth.isStudent()">
+      <a
+        routerLink="/student/exams"
+        routerLinkActive="active"
+        routerLinkActiveOptions="{ exact: true }"
+        class="menu-link"
+      >
+        <span>Available Exams</span>
+      </a>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,103 @@
+.layout {
+    display: flex;
+    height: calc(100vh - 60px);
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    background-color: #f5f7fa;
+    overflow-y: auto;
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+th {
+    background: #1976d2;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+    background-color: #f1f5f9;
+}
+
+.status-active {
+    color: green;
+    font-weight: bold;
+}
+
+.status-inactive {
+    color: red;
+    font-weight: bold;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+
+  border: none;
+  border-radius: 50%;
+
+  color: white;
+  font-size: 16px;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: 0.2s;
+}
+
+.icon-btn:hover {
+  transform: scale(1.08);
+  opacity: 0.9;
+}
+
+.edit-btn {
+  background: #455a64;
+}
+
+.upload-btn {
+  background: #1976d2;
+}
+
+.result-btn {
+  background: #2e7d32;
+}
+
+.analytics-btn {
+  background: #fb8c00;
+}
+
+.status-btn {
+  background: #6a1b9a;
+}
+
+.delete-btn {
+  background: #c62828;
+}

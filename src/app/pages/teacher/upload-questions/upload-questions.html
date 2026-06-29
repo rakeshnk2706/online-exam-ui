@@ -1,0 +1,28 @@
+<app-navbar></app-navbar>
+
+<div class="layout">
+  <app-sidebar></app-sidebar>
+
+  <div class="content">
+    <h2>Upload Questions</h2>
+
+    <div class="exam-info" *ngIf="exam">
+      <p><strong>Exam:</strong> {{ exam.examName }}</p>
+
+      <p><strong>Class:</strong> {{ exam.className }}</p>
+
+      <p><strong>Total Marks:</strong> {{ exam.totalMarks }}</p>
+    </div>
+
+    <input type="file" accept=".xlsx,.xls" (change)="onFileSelected($event)" />
+
+    <br /><br />
+
+    <button class="upload-btn" (click)="upload()">Upload Excel</button>
+    <div class="upload-message" *ngIf="uploadMessage" [class.success]="uploadSuccess" [class.error]="!uploadSuccess">
+
+      {{ uploadMessage }}
+
+    </div>
+  </div>
+</div>

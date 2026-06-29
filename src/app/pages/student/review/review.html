@@ -1,0 +1,43 @@
+<app-navbar></app-navbar>
+
+<div class="layout">
+  <app-sidebar></app-sidebar>
+
+  <div class="content">
+    <h2>Question Review</h2>
+
+    <div *ngIf="loading" class="loading">Loading...</div>
+
+    <div *ngFor="let question of review" class="review-card">
+      <h3>
+        {{ question.questionText }}
+      </h3>
+
+      <p>
+        <strong>Your Answer :</strong>
+        {{ question.selectedOptionText }}
+      </p>
+
+      <p>
+        <strong>Correct Answer :</strong>
+
+        {{ question.correctOptionText }}
+      </p>
+
+      <p>
+        <strong>Marks :</strong>
+
+        {{ question.marksObtained }}
+      </p>
+
+      <span
+        class="status"
+        [class.correct]="question.correct"
+        [class.wrong]="!question.correct && question.selectedOptionText"
+        [class.unanswered]="!question.selectedOptionText"
+      >
+        {{ !question.selectedOptionText ? 'Unanswered' : question.correct ? 'Correct' : 'Wrong' }}
+      </span>
+    </div>
+  </div>
+</div>

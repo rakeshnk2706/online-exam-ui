@@ -1,0 +1,87 @@
+<div class="exam-header">
+  <div class="title">
+    {{ examName }}
+  </div>
+
+  <div class="right">
+    <span> Total Marks: {{ totalMarks }} </span>
+
+    <span class="timer"> Time Left: {{ timerDisplay }} </span>
+
+    <span> Question {{ currentIndex + 1 }} of {{ questions.length }} </span>
+
+    <button class="submit-header" (click)="submitExam()">Submit Exam</button>
+  </div>
+</div>
+
+<div class="exam-page">
+  <!-- Loading -->
+
+  <div *ngIf="loading" class="loading">Loading Exam...</div>
+
+  <!-- Error -->
+
+  <div *ngIf="!loading && errorMessage" class="error">
+    {{ errorMessage }}
+  </div>
+
+  <!-- No Questions -->
+
+  <div *ngIf="!loading && !errorMessage && questions.length === 0" class="empty">
+    No Questions Available
+  </div>
+
+  <!-- Question -->
+
+  <div *ngIf="!loading && !errorMessage && questions.length > 0" class="exam-card">
+    <div class="question-header">
+      <h2>Question {{ currentIndex + 1 }}</h2>
+
+      <span class="marks">
+        Marks :
+        {{ currentQuestion.marks }}
+      </span>
+    </div>
+
+    <div class="question-text">
+      {{ currentQuestion.questionText }}
+    </div>
+
+    <!-- Options -->
+
+    <div class="option" *ngFor="let option of currentQuestion.options">
+      <label>
+        <input
+          type="radio"
+          name="question{{ currentQuestion.id }}"
+          [value]="option.optionCode"
+          [checked]="selectedAnswers[currentQuestion.id] === option.optionCode"
+          (change)="selectOption(option.optionCode)"
+        />
+
+        <span>
+          <strong>{{ option.optionCode }}.</strong>
+
+          {{ option.optionText }}
+        </span>
+      </label>
+    </div>
+    
+    <!-- Navigation -->
+
+    <div class="actions">
+      <button class="previous-btn" (click)="previousQuestion()" [disabled]="currentIndex === 0">
+        Previous
+      </button>
+      <!-- <button class="save" (click)="saveAnswer()">Save Answer</button> -->
+
+      <button
+        class="next-btn"
+        (click)="nextQuestion()"
+        [disabled]="currentIndex === questions.length - 1"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,76 @@
+<app-navbar></app-navbar>
+
+<div class="layout">
+  <app-sidebar></app-sidebar>
+
+  <div class="content">
+    <div class="page-header">
+      <h2>Exam Management</h2>
+    </div>
+
+    <div *ngIf="exams.length === 0" class="no-data">No Exams Found</div>
+
+    <table *ngIf="exams.length > 0">
+      <thead>
+        <tr>
+          <th style="display: none;">ID</th>
+          <th>Exam Name</th>
+          <th>Class</th>
+          <th>Description</th>
+          <th>Duration (Min)</th>
+          <th>Total Marks</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let exam of exams">
+          <td style="display: none;">{{ exam.id }}</td>
+
+          <td>{{ exam.examName }}</td>
+
+          <td>{{exam.className}} </td>
+
+          <td>{{ exam.description }}</td>
+
+          <td>{{ exam.durationMinutes }}</td>
+
+          <td>{{ exam.totalMarks }}</td>
+
+          <td>
+            <span [class.status-active]="exam.status === 'ACTIVE'" [class.status-inactive]="exam.status !== 'ACTIVE'">
+              {{ exam.status }}
+            </span>
+          </td>
+
+          <td class="action-buttons">
+            <button class="icon-btn edit-btn" (click)="editExam(exam.id)" title="Edit Exam">
+              ✎
+            </button>
+
+            <button class="icon-btn upload-btn" (click)="uploadQuestions(exam)" title="Upload Questions">
+              ⬆
+            </button>
+
+            <button class="icon-btn result-btn" (click)="viewResults(exam)" title="View Results">
+              📊
+            </button>
+
+            <button class="icon-btn analytics-btn" (click)="viewAnalytics(exam)" title="Analytics">
+              📈
+            </button>
+
+            <button class="icon-btn status-btn" (click)="toggleStatus(exam)" [title]="exam.status === 'ACTIVE' ? 'Deactivate Exam' : 'Activate Exam'">
+              {{ exam.status === 'ACTIVE' ? '✖' : '✓' }}
+            </button>
+
+            <button class="icon-btn delete-btn" (click)="deleteExam(exam.id)" title="Delete Exam">
+              🗑
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,64 @@
+<app-navbar></app-navbar>
+
+<div class="layout">
+  <app-sidebar></app-sidebar>
+
+  <div class="content">
+    <div *ngIf="loading" class="loading">Loading Result...</div>
+
+    <div *ngIf="!loading && result" class="result-card">
+      <h2>Exam Result</h2>
+
+      <h3>{{ result.examName }}</h3>
+
+      <div
+        class="status"
+        [class.pass]="result.result === 'PASS'"
+        [class.fail]="result.result === 'FAIL'"
+      >
+        {{ result.result }}
+      </div>
+
+      <div class="score-box">
+        <h1>{{ result.score }} / {{ result.totalMarks }}</h1>
+
+        <p>Percentage: {{ result.percentage | number: '1.2-2' }}%</p>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-item">
+          <label>Total Questions</label>
+          <strong>{{ result.totalQuestions }}</strong>
+        </div>
+
+        <div class="summary-item">
+          <label>Attempted</label>
+          <strong>{{ result.attemptedQuestions }}</strong>
+        </div>
+
+        <div class="summary-item correct">
+          <label>Correct</label>
+          <strong>{{ result.correctAnswers }}</strong>
+        </div>
+
+        <div class="summary-item wrong">
+          <label>Wrong</label>
+          <strong>{{ result.wrongAnswers }}</strong>
+        </div>
+
+        <div class="summary-item unanswered">
+          <label>Unanswered</label>
+          <strong>{{ result.unanswered }}</strong>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="dashboard-btn" (click)="goDashboard()">Dashboard</button>
+
+        <button class="exam-btn" (click)="goExams()">Available Exams</button>
+
+        <button class="review-btn" (click)="reviewAnswers()">Review Answers</button>
+      </div>
+    </div>
+  </div>
+</div>

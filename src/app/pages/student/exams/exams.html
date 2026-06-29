@@ -1,0 +1,75 @@
+<app-navbar></app-navbar>
+
+<div class="layout">
+  <app-sidebar></app-sidebar>
+
+  <div class="content">
+    <h2>Available Exams</h2>
+    <button class="refresh-btn" (click)="loadExams()" [disabled]="loading">
+      <span class="refresh-icon" [class.spin]="loading">
+        {{ loading ? '⟳' : '↻' }}
+      </span>
+
+      {{ loading ? 'Refreshing...' : 'Refresh' }}
+    </button>
+    <!-- Loading -->
+
+    <div *ngIf="loading" class="overlay">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- No Exams -->
+
+    <div *ngIf="!loading && exams.length === 0" class="empty">No Exams Available</div>
+
+    <!-- Exam Table -->
+
+    <table *ngIf="!loading && exams.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+
+          <th>Exam Name</th>
+
+          <th>Description</th>
+
+          <th>Duration (Min)</th>
+
+          <th>Total Marks</th>
+
+          <th>Status</th>
+
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let exam of exams">
+          <td>{{ exam.id }}</td>
+
+          <td>{{ exam.examName }}</td>
+
+          <td>{{ exam.description }}</td>
+
+          <td>{{ exam.durationMinutes }}</td>
+
+          <td>{{ exam.totalMarks }}</td>
+
+          <td>{{ exam.status }}</td>
+
+          <td>
+            <button class="start-btn" (click)="startExam(exam)" [disabled]="!exam.canStart">
+              {{
+                exam.attemptStatus === 'COMPLETED'
+                  ? 'Already Appeared'
+                  : exam.attemptStatus === 'IN_PROGRESS'
+                    ? 'In Progress'
+                    : 'Start Exam'
+              }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
