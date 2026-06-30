@@ -154,7 +154,6 @@ export class TakeExam implements OnInit {
   }
 
   submitExamConfirmed() {
-  
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
     }
@@ -196,7 +195,7 @@ export class TakeExam implements OnInit {
 
         this.dialog.info('Time is over. Exam will be submitted automatically.');
 
-        this.submitExam();
+        this.submitExamConfirmed();
       }
     }, 1000);
   }
@@ -207,5 +206,21 @@ export class TakeExam implements OnInit {
     const seconds = this.timeLeft % 60;
 
     this.timerDisplay = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+
+  goToQuestion(index: number) {
+    this.currentIndex = index;
+  }
+
+  get answeredCount() {
+    return Object.keys(this.selectedAnswers).length;
+  }
+
+  get unansweredCount() {
+    return this.questions.length - this.answeredCount;
+  }
+
+  isAnswered(questionId: number) {
+    return !!this.selectedAnswers[questionId];
   }
 }

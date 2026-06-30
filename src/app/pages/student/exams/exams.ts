@@ -87,4 +87,10 @@ export class Exams implements OnInit {
       },
     });
   }
+
+   checkResult(exam:any){
+    this.router.navigate(['/student/result', exam.attemptId], {
+      state: {viewMode: 'studentView'},
+    });
+  }
 }

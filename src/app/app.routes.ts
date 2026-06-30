@@ -114,7 +114,7 @@ export const routes: Routes = [
     path: 'student/result/:attemptId',
     canActivate: [roleGuard],
     data: {
-      roles: ['STUDENT'],
+      roles: ['STUDENT','TEACHER','ADMIN'],
     },
     loadComponent: () => import('./pages/student/result/result').then((m) => m.Result),
   },
@@ -122,7 +122,7 @@ export const routes: Routes = [
     path: 'student/review/:attemptId',
     canActivate: [roleGuard],
     data: {
-      roles: ['STUDENT'],
+      roles: ['STUDENT','TEACHER','ADMIN'],
     },
     loadComponent: () => import('./pages/student/review/review').then((m) => m.Review),
   },

@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Navbar } from '../../../shared/navbar/navbar';
 import { Sidebar } from '../../../shared/sidebar/sidebar';
@@ -18,7 +18,7 @@ export class Results implements OnInit {
   private route = inject(ActivatedRoute);
   private teacherService = inject(TeacherService);
   private cdr = inject(ChangeDetectorRef);
-
+  private router = inject(Router);
   examId!: number;
 
   loading = true;
@@ -27,13 +27,20 @@ export class Results implements OnInit {
   exam: any;
 
   filterResults: any[] = [];
-  
+
   rollNoFilter: string = '';
   studentNameFilter: string = '';
   sectionFilter: string = '';
   scoreFilter: string = '';
   examStatusFilter: string = '';
   statusFilter: string = '';
+
+  showResultPopup = false;
+  showReviewPopup = false;
+
+  selectedResult: any = {};
+
+  selectedReviewResult: any = {};
 
   ngOnInit(): void {
     this.examId = Number(this.route.snapshot.paramMap.get('examId'));
@@ -117,5 +124,66 @@ export class Results implements OnInit {
         String(result.marksObtained ?? '').includes(this.scoreFilter) &&
         (result.examStatus ?? '').toLowerCase().includes(this.examStatusFilter.toLowerCase()),
     );
+  }
+
+  // checkResult(result: any) {
+  //   this.router.navigate(['/student/result', result.attemptId], {
+  //     state: {viewMode: 'teacherView'},
+  //   });
+  // }
+
+  checkResult(result: any) {
+    this.teacherService.getResult(result.attemptId).subscribe({
+      next: (data) => {
+        this.selectedResult = data;
+        this.selectedResult.studentName = result.studentName;
+        this.selectedResult.marksObtained = result.marksObtained;
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+
+      error: (err) => {
+        console.error(err);
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+    });
+    this.showResultPopup = true;
+    this.cdr.detectChanges();
+  }
+
+  closeResultPopup() {
+    this.selectedReviewResult = {};
+    this.selectedResult = {};
+    this.showResultPopup = false;
+    this.cdr.detectChanges();
+  }
+
+  reviewAnswers(result: any) {
+    this.closeResultPopup();
+    this.teacherService.getReview(result.attemptId).subscribe({
+      next: (data: any) => {
+        this.selectedReviewResult = data;
+        this.selectedReviewResult.studentName = result.studentName;
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+
+      error: (err) => {
+        console.error(err);
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+    });
+
+    this.showReviewPopup = true;
+    this.cdr.detectChanges();
+  }
+
+  closeResultReviewPopup(){
+    this.selectedReviewResult = {};
+    this.selectedResult = {};
+    this.showReviewPopup = false;
+    this.cdr.detectChanges();
   }
 }

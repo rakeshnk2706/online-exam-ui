@@ -41,4 +41,12 @@ export class TeacherService {
       },
     );
   }
+
+   getResult(attemptId: number) {
+    return this.http.get<any>(`${this.api}/result/${attemptId}`);
+  }
+
+  getReview(attemptId: number) {
+    return this.http.get<any[]>(`${this.api}/review/${attemptId}`);
+  }
 }

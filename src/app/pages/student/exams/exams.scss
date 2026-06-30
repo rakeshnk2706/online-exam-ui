@@ -158,3 +158,16 @@ tr:hover {
 .refresh-btn i {
   font-size: 14px;
 }
+
+.review-btn {
+    background: #2e7d32;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.review-btn:hover {
+    background: #1b5e20;
+}

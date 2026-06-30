@@ -4,7 +4,6 @@
   <app-sidebar></app-sidebar>
 
   <div class="content">
-    
     <div class="page-header">
       <div>
         <h2>Exam Results</h2>
@@ -28,7 +27,6 @@
     </button>
     <div *ngIf="loading" class="loading">Loading Results...</div>
 
-    
     <table *ngIf="!loading && results.length > 0">
       <thead>
         <tr>
@@ -42,27 +40,51 @@
         </tr>
         <tr class="filter-row">
           <th>
-            <input type="text" [(ngModel)]="rollNoFilter" (input)="filterResult()" placeholder="Search" />
+            <input
+              type="text"
+              [(ngModel)]="rollNoFilter"
+              (input)="filterResult()"
+              placeholder="Search"
+            />
           </th>
           <th>
-            <input type="text" [(ngModel)]="studentNameFilter" (input)="filterResult()" placeholder="Search" />
+            <input
+              type="text"
+              [(ngModel)]="studentNameFilter"
+              (input)="filterResult()"
+              placeholder="Search"
+            />
           </th>
           <th>
-            <input type="text" [(ngModel)]="sectionFilter" (input)="filterResult()" placeholder="Search" />
+            <input
+              type="text"
+              [(ngModel)]="sectionFilter"
+              (input)="filterResult()"
+              placeholder="Search"
+            />
           </th>
           <th>
-            <input type="text" [(ngModel)]="scoreFilter" (input)="filterResult()" placeholder="Search" />
+            <input
+              type="text"
+              [(ngModel)]="scoreFilter"
+              (input)="filterResult()"
+              placeholder="Search"
+            />
           </th>
           <th>
-            <input type="text" [(ngModel)]="examStatusFilter" (input)="filterResult()" placeholder="Search" />
+            <input
+              type="text"
+              [(ngModel)]="examStatusFilter"
+              (input)="filterResult()"
+              placeholder="Search"
+            />
           </th>
-          <th>
-          </th>
+          <th></th>
           <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr colspan="7" *ngIf="!loading && filterResults.length === 0"  class="loading">
+        <tr colspan="7" *ngIf="!loading && filterResults.length === 0" class="loading">
           No results found
         </tr>
       </tbody>
@@ -77,23 +99,154 @@
           <td>{{ result.marksObtained }} / {{ result.totalMarks }}</td>
 
           <td>
-            <span class="badge" [class.completed]="result.examStatus === 'COMPLETED'" [class.in-progress]="result.examStatus === 'IN_PROGRESS'" [class.not-appeared]="result.examStatus === 'NOT_APPEARED'">
+            <span
+              class="badge"
+              [class.completed]="result.examStatus === 'COMPLETED'"
+              [class.in-progress]="result.examStatus === 'IN_PROGRESS'"
+              [class.not-appeared]="result.examStatus === 'NOT_APPEARED'"
+            >
               {{ result.examStatus }}
             </span>
           </td>
           <td>
-            <span class="badge" [class.pass]="result.result === 'PASS'" [class.fail]="result.result === 'FAIL'" [class.pending]="result.result === 'PENDING'" [class.not-appeared]="result.result === 'NOT_APPEARED'">
+            <span
+              class="badge"
+              [class.pass]="result.result === 'PASS'"
+              [class.fail]="result.result === 'FAIL'"
+              [class.pending]="result.result === 'PENDING'"
+              [class.not-appeared]="result.result === 'NOT_APPEARED'"
+            >
               {{ result.result }}
             </span>
           </td>
           <td>
-            <button *ngIf="result.examStatus === 'IN_PROGRESS'" class="reset-btn" (click)="resetStudentExam(result.studentId)" title="Reset Student Exam">
+            <button
+              *ngIf="result.examStatus === 'IN_PROGRESS'"
+              class="reset-btn"
+              (click)="resetStudentExam(result.studentId)"
+              title="Reset Student Exam"
+            >
               <span class="reset-icon">↺</span>
               Reset
+            </button>
+
+            <button
+              *ngIf="result.examStatus === 'COMPLETED'"
+              class="review-btn"
+              (click)="checkResult(result)"
+              title="Check Result"
+            >
+              Check Result
             </button>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+<!--Result Popup -->
+<div class="popup-overlay" *ngIf="showResultPopup">
+  <div class="result-popup">
+    <h2>Exam Result :: {{selectedResult.studentName}}</h2>
+
+    <div
+      class="status"
+      [class.pass]="selectedResult.result === 'PASS'"
+      [class.fail]="selectedResult.result === 'FAIL'"
+    >
+      {{ selectedResult.result }}
+    </div>
+
+    <div class="score-box">
+      <h1>
+        {{ selectedResult.marksObtained }}
+        /
+        {{ selectedResult.totalMarks }}
+      </h1>
+
+      <p>
+        Percentage :
+        {{ selectedResult.percentage | number: '1.2-2' }}%
+      </p>
+    </div>
+
+    <div class="summary-grid">
+      <div class="summary-item">
+        <label>Total Questions</label>
+
+        <strong>{{ selectedResult.totalQuestions }}</strong>
+      </div>
+
+      <div class="summary-item">
+        <label>Attempted</label>
+
+        <strong>{{ selectedResult.attemptedQuestions }}</strong>
+      </div>
+
+      <div class="summary-item correct">
+        <label>Correct</label>
+
+        <strong>{{ selectedResult.correctAnswers }}</strong>
+      </div>
+
+      <div class="summary-item wrong">
+        <label>Wrong</label>
+
+        <strong>{{ selectedResult.wrongAnswers }}</strong>
+      </div>
+
+      <div class="summary-item unanswered">
+        <label>Unanswered</label>
+
+        <strong>{{ selectedResult.unanswered }}</strong>
+      </div>
+    </div>
+
+    <div class="popup-buttons">
+      <button class="review-btn" (click)="reviewAnswers(selectedResult)">Review Answers</button>
+
+      <button class="close-btn" (click)="closeResultPopup()">Close</button>
+    </div>
+  </div>
+</div>
+<!--Review Popup -->
+<div class="popup-overlay review-popup" *ngIf="showReviewPopup">
+  <div class="result-popup">
+    <h2>Review Answers :: {{selectedReviewResult.studentName}}</h2>
+    <div class="review-content">
+
+    <div *ngFor="let question of selectedReviewResult;let i = index" class="review-card">
+      <h3>{{ i + 1 }}. {{ question.questionText }}</h3>
+
+      <p>
+        <strong>Your Answer :</strong>
+        {{ question.selectedOptionText }}
+      </p>
+
+      <p>
+        <strong>Correct Answer :</strong>
+
+        {{ question.correctOptionText }}
+      </p>
+
+      <p>
+        <strong>Marks :</strong>
+
+        {{ question.marksObtained }}
+      </p>
+
+      <span
+        class="status"
+        [class.correct]="question.correct"
+        [class.wrong]="!question.correct && question.selectedOptionText"
+        [class.unanswered]="!question.selectedOptionText"
+      >
+        {{ !question.selectedOptionText ? 'Unanswered' : question.correct ? 'Correct' : 'Wrong' }}
+      </span>
+    </div><!-- Add review details here -->
+    </div>
+    <div class="popup-buttons">
+      <button class="close-btn" (click)="closeResultReviewPopup()">Close</button>
+    </div>
   </div>
 </div>

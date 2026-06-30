@@ -58,14 +58,15 @@
           <td>{{ exam.status }}</td>
 
           <td>
-            <button class="start-btn" (click)="startExam(exam)" [disabled]="!exam.canStart">
+            <button class="start-btn"  *ngIf="exam.attemptStatus !== 'COMPLETED'" (click)="startExam(exam)" [disabled]="!exam.canStart">
               {{
-                exam.attemptStatus === 'COMPLETED'
-                  ? 'Already Appeared'
-                  : exam.attemptStatus === 'IN_PROGRESS'
+                exam.attemptStatus === 'IN_PROGRESS'
                     ? 'In Progress'
                     : 'Start Exam'
               }}
+            </button>
+            <button class="review-btn" *ngIf="exam.attemptStatus === 'COMPLETED'" (click)="checkResult(exam)">
+              Review Answers
             </button>
           </td>
         </tr>

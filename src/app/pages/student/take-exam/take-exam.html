@@ -4,83 +4,125 @@
   </div>
 
   <div class="right">
-    <span> Total Marks: {{ totalMarks }} </span>
+    <span>Total Marks: {{ totalMarks }}</span>
 
-    <span class="timer"> Time Left: {{ timerDisplay }} </span>
+    <span class="timer">Time Left: {{ timerDisplay }}</span>
 
-    <span> Question {{ currentIndex + 1 }} of {{ questions.length }} </span>
+    <span>Question {{ currentIndex + 1 }} of {{ questions.length }}</span>
 
     <button class="submit-header" (click)="submitExam()">Submit Exam</button>
   </div>
 </div>
 
 <div class="exam-page">
-  <!-- Loading -->
-
   <div *ngIf="loading" class="loading">Loading Exam...</div>
-
-  <!-- Error -->
 
   <div *ngIf="!loading && errorMessage" class="error">
     {{ errorMessage }}
   </div>
 
-  <!-- No Questions -->
-
   <div *ngIf="!loading && !errorMessage && questions.length === 0" class="empty">
     No Questions Available
   </div>
 
-  <!-- Question -->
+  <div
+    *ngIf="!loading && !errorMessage && questions.length > 0"
+    class="exam-layout"
+  >
+    <!-- LEFT QUESTION AREA -->
+    <div class="question-section">
+      <div class="exam-card">
+        <div class="question-header">
+          <h2>Question {{ currentIndex + 1 }}</h2>
 
-  <div *ngIf="!loading && !errorMessage && questions.length > 0" class="exam-card">
-    <div class="question-header">
-      <h2>Question {{ currentIndex + 1 }}</h2>
+          <span class="marks">
+            Marks : {{ currentQuestion.marks }}
+          </span>
+        </div>
 
-      <span class="marks">
-        Marks :
-        {{ currentQuestion.marks }}
-      </span>
+        <div class="question-text">
+          {{ currentQuestion.questionText }}
+        </div>
+
+        <div class="option" *ngFor="let option of currentQuestion.options">
+          <label>
+            <input
+              type="radio"
+              name="question{{ currentQuestion.id }}"
+              [value]="option.optionCode"
+              [checked]="selectedAnswers[currentQuestion.id] === option.optionCode"
+              (change)="selectOption(option.optionCode)"
+            />
+
+            <span>
+              <strong>{{ option.optionCode }}.</strong>
+              {{ option.optionText }}
+            </span>
+          </label>
+        </div>
+
+        <div class="actions">
+          <button
+            class="previous-btn"
+            (click)="previousQuestion()"
+            [disabled]="currentIndex === 0"
+          >
+            Previous
+          </button>
+
+          <button
+            class="next-btn"
+            (click)="nextQuestion()"
+            [disabled]="currentIndex === questions.length - 1"
+          >
+            Next
+          </button>
+        </div>
+      </div>
     </div>
 
-    <div class="question-text">
-      {{ currentQuestion.questionText }}
-    </div>
+    <!-- RIGHT STATUS PANEL -->
+    <div class="question-panel">
+      <h3>Question Status</h3>
 
-    <!-- Options -->
+      <div class="stats">
+        <div class="stat answered-stat">
+          <span>{{ answeredCount }}</span>
+          <label>Answered</label>
+        </div>
 
-    <div class="option" *ngFor="let option of currentQuestion.options">
-      <label>
-        <input
-          type="radio"
-          name="question{{ currentQuestion.id }}"
-          [value]="option.optionCode"
-          [checked]="selectedAnswers[currentQuestion.id] === option.optionCode"
-          (change)="selectOption(option.optionCode)"
-        />
+        <div class="stat unanswered-stat">
+          <span>{{ unansweredCount }}</span>
+          <label>Unanswered</label>
+        </div>
 
-        <span>
-          <strong>{{ option.optionCode }}.</strong>
+        <div class="stat total-stat">
+          <span>{{ questions.length }}</span>
+          <label>Total</label>
+        </div>
+      </div>
 
-          {{ option.optionText }}
-        </span>
-      </label>
-    </div>
-    
-    <!-- Navigation -->
+      <div class="palette">
+        <button
+          *ngFor="let q of questions; let i = index"
+          class="palette-btn"
+          (click)="goToQuestion(i)"
+          [class.current]="currentIndex === i"
+          [class.answered]="isAnswered(q.id)"
+          [class.unanswered]="!isAnswered(q.id) && currentIndex !== i"
+        >
+          {{ i + 1 }}
+        </button>
+      </div>
 
-    <div class="actions">
-      <button class="previous-btn" (click)="previousQuestion()" [disabled]="currentIndex === 0">
-        Previous
-      </button>
-      <!-- <button class="save" (click)="saveAnswer()">Save Answer</button> -->
+      <div class="legend">
+        <p><span class="box answered-box"></span> Answered</p>
+        <p><span class="box unanswered-box"></span> Unanswered</p>
+        <p><span class="box current-box"></span> Current</p>
+      </div>
 
-      <button
-        class="next-btn"
-        (click)="nextQuestion()"
-        [disabled]="currentIndex === questions.length - 1"
-      >
-        Next
+      <button class="submit-side-btn" (click)="submitExam()">
+        Submit Exam
       </button>
     </div>
   </div>
