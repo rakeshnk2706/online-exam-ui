@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,7 +14,7 @@ import { ExamService } from '../../../core/services/exam.service';
   templateUrl: './edit-exam.html',
   styleUrl: './edit-exam.scss',
 })
-export class EditExam implements OnInit {
+export class EditExam {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private examService = inject(ExamService);
@@ -46,13 +46,13 @@ export class EditExam implements OnInit {
     this.loading = true;
 
     this.examService.getExamById(this.examId).subscribe({
-      next: (data) => {
+      next: (data: any) => {
         this.exam = data;
         this.loading = false;
         this.validateExam();
         this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error(err);
         this.loading = false;
         this.cdr.detectChanges();
@@ -91,7 +91,7 @@ export class EditExam implements OnInit {
 
         this.router.navigate(['/teacher/exams']);
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error(err);
         alert('Failed to update exam');
       },
