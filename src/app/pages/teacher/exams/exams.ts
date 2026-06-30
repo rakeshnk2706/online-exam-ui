@@ -12,11 +12,12 @@ import { Sidebar } from '../../../shared/sidebar/sidebar';
 
 import { ExamService } from '../../../core/services/exam.service';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-exams',
   standalone: true,
-  imports: [CommonModule, Navbar, Sidebar],
+  imports: [CommonModule,FormsModule, Navbar, Sidebar],
   templateUrl: './exams.html',
   styleUrl: './exams.scss',
 })
@@ -24,6 +25,15 @@ export class Exams implements OnInit {
   private router = inject(Router);
   private examService = inject(ExamService);
   private cdr = inject(ChangeDetectorRef);
+
+  filteredExams: any[] = [];
+
+  examNameFilter = '';
+  classFilter = '';
+  descriptionFilter = '';
+  durationFilter = '';
+  totalMarksFilter = '';
+  statusFilter = '';
 
   exams: any[] = [];
 
@@ -35,6 +45,7 @@ export class Exams implements OnInit {
     this.examService.getAllExams().subscribe({
       next: (data) => {
         this.exams = data;
+        this.filteredExams = [...this.exams];
         this.cdr.detectChanges();
       },
 
@@ -100,5 +111,17 @@ export class Exams implements OnInit {
         this.cdr.detectChanges();
       },
     });
+  }
+
+  filterExams() {
+    this.filteredExams = this.exams.filter(
+      (exam) =>
+        (exam.examName ?? '').toLowerCase().includes(this.examNameFilter.toLowerCase()) &&
+        (exam.className ?? '').toLowerCase().includes(this.classFilter.toLowerCase()) &&
+        (exam.description ?? '').toLowerCase().includes(this.descriptionFilter.toLowerCase()) &&
+        String(exam.durationMinutes ?? '').includes(this.durationFilter) &&
+        String(exam.totalMarks ?? '').includes(this.totalMarksFilter) &&
+        (exam.status ?? '').toLowerCase().includes(this.statusFilter.toLowerCase()),
+    );
   }
 }

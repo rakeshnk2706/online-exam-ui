@@ -4,13 +4,7 @@
   <app-sidebar></app-sidebar>
 
   <div class="content">
-    <button class="refresh-btn" (click)="loadResults()" [disabled]="loading">
-      <span class="refresh-icon" [class.spin]="loading">
-        {{ loading ? '⟳' : '↻' }}
-      </span>
-
-      {{ loading ? 'Refreshing...' : 'Refresh Results' }}
-    </button>
+    
     <div class="page-header">
       <div>
         <h2>Exam Results</h2>
@@ -21,15 +15,20 @@
         <p><strong>Total Marks:</strong> {{ exam.totalMarks }}</p>
       </div>
 
-      <button class="export-btn" (click)="exportExcel()" [disabled]="results.length === 0">
+      <button class="export-btn" (click)="exportExcel()" [disabled]="filterResults.length === 0">
         Export Excel
       </button>
     </div>
+    <button class="refresh-btn" (click)="loadResults()" [disabled]="loading">
+      <span class="refresh-icon" [class.spin]="loading">
+        {{ loading ? '⟳' : '↻' }}
+      </span>
 
+      {{ loading ? 'Refreshing...' : 'Refresh Results' }}
+    </button>
     <div *ngIf="loading" class="loading">Loading Results...</div>
 
-    <div *ngIf="!loading && results.length === 0" class="empty">No Results Found</div>
-
+    
     <table *ngIf="!loading && results.length > 0">
       <thead>
         <tr>
@@ -41,10 +40,34 @@
           <th>Pass / Fail</th>
           <th>Action</th>
         </tr>
+        <tr class="filter-row">
+          <th>
+            <input type="text" [(ngModel)]="rollNoFilter" (input)="filterResult()" placeholder="Search" />
+          </th>
+          <th>
+            <input type="text" [(ngModel)]="studentNameFilter" (input)="filterResult()" placeholder="Search" />
+          </th>
+          <th>
+            <input type="text" [(ngModel)]="sectionFilter" (input)="filterResult()" placeholder="Search" />
+          </th>
+          <th>
+            <input type="text" [(ngModel)]="scoreFilter" (input)="filterResult()" placeholder="Search" />
+          </th>
+          <th>
+            <input type="text" [(ngModel)]="examStatusFilter" (input)="filterResult()" placeholder="Search" />
+          </th>
+          <th>
+          </th>
+          <th></th>
+        </tr>
       </thead>
-
       <tbody>
-        <tr *ngFor="let result of results">
+        <tr colspan="7" *ngIf="!loading && filterResults.length === 0"  class="loading">
+          No results found
+        </tr>
+      </tbody>
+      <tbody>
+        <tr *ngFor="let result of filterResults">
           <td>{{ result.rollNo }}</td>
 
           <td>{{ result.studentName }}</td>

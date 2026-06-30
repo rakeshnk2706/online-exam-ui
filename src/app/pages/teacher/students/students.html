@@ -20,7 +20,7 @@
       <div class="upload-box">
         <label>Upload Student Excel</label>
 
-        <input type="file" accept=".xlsx,.xls" (change)="onFileSelected($event)" />
+        <input #fileInput type="file" accept=".xlsx,.xls" (change)="onFileSelected($event)" />
 
         <button class="upload-btn" (click)="uploadStudents()">Upload Students</button>
       </div>
@@ -35,8 +35,8 @@
 
       <div *ngIf="loading" class="loading">Loading Students...</div>
 
-      <div *ngIf="!loading && filteredStudents.length === 0" class="empty">No Students Found</div>
-      <table *ngIf="!loading && filteredStudents.length > 0">
+      <!--<div *ngIf="!loading && filteredStudents.length === 0" class="empty">No Students Found</div>-->
+      <table *ngIf="!loading && students.length > 0">
         <thead>
           <tr>
             <th>Roll No</th>
@@ -96,7 +96,11 @@
             <th></th>
           </tr>
         </thead>
-
+        <tbody>
+          <tr colspan="6" *ngIf="!loading && filteredStudents.length === 0" class="loading">
+            No Students Found
+          </tr>   
+        </tbody>
         <tbody>
           <tr *ngFor="let student of filteredStudents">
             <td>{{ student.rollNo }}</td>

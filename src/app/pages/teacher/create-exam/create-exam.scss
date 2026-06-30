@@ -52,3 +52,20 @@ button:disabled {
     cursor: not-allowed;
     opacity: .7;
 }
+
+.required {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+.error {
+  display: block;
+  margin-top: 4px;
+  color: #d32f2f;
+  font-size: 12px;
+}
+
+.form-group input.ng-invalid,
+.form-group textarea.ng-invalid {
+  border-color: #d32f2f;
+}

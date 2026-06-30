@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { StudentService } from '../../../core/services/student.service';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
 @Component({
   selector: 'app-take-exam',
   standalone: true,
@@ -16,6 +17,7 @@ export class TakeExam implements OnInit {
   private router = inject(Router);
   private studentService = inject(StudentService);
   private cdr = inject(ChangeDetectorRef);
+  private dialog = inject(ConfirmDialogService);
 
   attemptId!: number;
   examId!: number;
@@ -37,7 +39,6 @@ export class TakeExam implements OnInit {
   timerInterval: any;
 
   selectedAnswers: { [questionId: number]: string } = {};
-  
 
   ngOnInit(): void {
     this.attemptId = Number(this.route.snapshot.paramMap.get('attemptId'));
@@ -76,22 +77,6 @@ export class TakeExam implements OnInit {
     });
   }
 
-  // loadQuestions() {
-  //   this.studentService.getQuestions(this.examId).subscribe({
-  //     next: (data: any) => {
-  //       this.questions = Array.isArray(data) ? data : [];
-  //       this.loading = false;
-  //       this.cdr.detectChanges();
-  //     },
-  //     error: (err) => {
-  //       console.error(err);
-  //       this.errorMessage = 'Unable to load questions';
-  //       this.loading = false;
-  //       this.cdr.detectChanges();
-  //     },
-  //   });
-  // }
-
   loadAttemptQuestions() {
     this.loading = true;
 
@@ -125,7 +110,7 @@ export class TakeExam implements OnInit {
     const selectedOption = this.selectedAnswers[question.id];
 
     if (!selectedOption) {
-      alert('Please select an option');
+      this.dialog.info('Please select an option');
       return;
     }
 
@@ -137,11 +122,11 @@ export class TakeExam implements OnInit {
 
     this.studentService.saveAnswer(request).subscribe({
       next: () => {
-        alert('Answer Saved');
+        this.dialog.info('Answer Saved');
       },
       error: (err) => {
         console.error(err);
-        alert('Failed to save answer');
+        this.dialog.info('Failed to save answer');
       },
     });
   }
@@ -159,17 +144,24 @@ export class TakeExam implements OnInit {
   }
 
   submitExam() {
-    if (!confirm('Are you sure you want to submit the exam?')) {
-      return;
-    }
+    this.dialog
+      .confirm('Submit Exam', 'Are you sure you want to submit the exam?', 'Submit', 'Cancel')
+      .subscribe((ok) => {
+        if (ok) {
+          this.submitExamConfirmed();
+        }
+      });
+  }
 
+  submitExamConfirmed() {
+  
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
     }
 
-    const answers = this.questions.map(question => ({
-        questionId: question.id,
-        selectedOption: this.selectedAnswers[question.id] || null
+    const answers = this.questions.map((question) => ({
+      questionId: question.id,
+      selectedOption: this.selectedAnswers[question.id] || null,
     }));
 
     const request = {
@@ -180,11 +172,12 @@ export class TakeExam implements OnInit {
     this.studentService.submitExam(request).subscribe({
       next: () => {
         this.router.navigate(['/student/result', this.attemptId]);
+        this.cdr.detectChanges();
       },
 
       error: (err) => {
         console.error(err);
-        alert('Failed to submit exam');
+        this.dialog.info('Failed to submit exam');
       },
     });
   }
@@ -201,7 +194,7 @@ export class TakeExam implements OnInit {
       if (this.timeLeft <= 0) {
         clearInterval(this.timerInterval);
 
-        alert('Time is over. Exam will be submitted automatically.');
+        this.dialog.info('Time is over. Exam will be submitted automatically.');
 
         this.submitExam();
       }

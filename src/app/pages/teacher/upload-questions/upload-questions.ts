@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef,ViewChild, ElementRef , Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
@@ -25,7 +25,12 @@ export class UploadQuestions {
   uploadMessage = '';
   uploadSuccess = false;
 
-  selectedFile!: File;
+  @ViewChild('fileInput')
+fileInput!: ElementRef<HTMLInputElement>;
+
+selectedFile?: File;
+
+uploading = false;
 
   ngOnInit() {
     this.examId = Number(this.route.snapshot.paramMap.get('examId'));
@@ -46,6 +51,14 @@ export class UploadQuestions {
     this.uploadMessage = '';
     this.uploadSuccess = false;
 
+     if (!this.selectedFile) {
+    this.uploadMessage = 'Please select an Excel file.';
+    this.uploadSuccess = false;
+    return;
+  }
+
+  this.uploading = true;
+
     if (!this.selectedFile) {
       this.uploadMessage = 'Please select an Excel file.';
       return;
@@ -57,6 +70,10 @@ export class UploadQuestions {
 
         this.uploadMessage = response?.message || 'Questions uploaded successfully.';
 
+        this.selectedFile = undefined;
+        this.fileInput.nativeElement.value = '';
+
+        this.uploading = false;
         this.cdr.detectChanges();
       },
 
@@ -66,6 +83,11 @@ export class UploadQuestions {
         this.uploadSuccess = false;
 
         this.uploadMessage = err?.error?.message || 'Upload failed. Please check Excel file.';
+        
+        this.selectedFile = undefined;
+        this.fileInput.nativeElement.value = '';
+
+        this.uploading = false;
         this.cdr.detectChanges();
       },
     });

@@ -6,6 +6,7 @@ import { Sidebar } from '../../../shared/sidebar/sidebar';
 
 import { ExamService } from '../../../core/services/exam.service';
 import { CommonModule } from '@angular/common';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
 
 @Component({
   selector: 'app-create-exam',
@@ -17,7 +18,16 @@ import { CommonModule } from '@angular/common';
 export class CreateExam {
   private examService = inject(ExamService);
   private cdr = inject(ChangeDetectorRef);
+  private dialog = inject(ConfirmDialogService);
   validationMessage = '';
+
+  fieldErrors = {
+    examName: '',
+    className: '',
+    durationMinutes: '',
+    totalMarks: '',
+    questionCount: '',
+  };
 
   exam = {
     examName: '',
@@ -30,7 +40,9 @@ export class CreateExam {
   };
 
   createExam() {
-    this.validateExam();
+    if (!this.validateRequiredFields()) {
+      return;
+    }
 
     if (this.validationMessage) {
       return;
@@ -38,7 +50,7 @@ export class CreateExam {
 
     this.examService.createExam(this.exam).subscribe({
       next: () => {
-        alert('Exam Created Successfully');
+        this.dialog.info('Exam Created Successfully');
 
         this.exam = {
           examName: '',
@@ -51,10 +63,12 @@ export class CreateExam {
         };
 
         this.validationMessage = '';
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error(err);
-        alert('Failed to Create Exam');
+        this.dialog.error('Failed to Create Exam');
+        this.cdr.detectChanges();
       },
     });
   }
@@ -75,5 +89,44 @@ export class CreateExam {
       this.validationMessage = 'Total Marks should be exactly divisible by Question Count.';
       return;
     }
+  }
+
+  validateRequiredFields(): boolean {
+    let valid = true;
+
+    this.fieldErrors = {
+      examName: '',
+      className: '',
+      durationMinutes: '',
+      totalMarks: '',
+      questionCount: '',
+    };
+
+    if (!this.exam.examName?.trim()) {
+      this.fieldErrors.examName = 'Exam Name is required.';
+      valid = false;
+    }
+
+    if (!this.exam.className?.trim()) {
+      this.fieldErrors.className = 'Class is required.';
+      valid = false;
+    }
+
+    if (!this.exam.durationMinutes || this.exam.durationMinutes <= 0) {
+      this.fieldErrors.durationMinutes = 'Duration is required.';
+      valid = false;
+    }
+
+    if (!this.exam.totalMarks || this.exam.totalMarks <= 0) {
+      this.fieldErrors.totalMarks = 'Total Marks is required.';
+      valid = false;
+    }
+
+    if (!this.exam.questionCount || this.exam.questionCount <= 0) {
+      this.fieldErrors.questionCount = 'Question Count is required.';
+      valid = false;
+    }
+
+    return valid;
   }
 }

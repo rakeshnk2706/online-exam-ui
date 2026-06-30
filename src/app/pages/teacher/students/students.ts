@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { ViewChild, ElementRef ,Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { Navbar } from '../../../shared/navbar/navbar';
@@ -20,7 +20,10 @@ export class Students implements OnInit {
   students: any[] = [];
   loading = true;
 
-  selectedFile!: File;
+  @ViewChild('fileInput')
+  fileInput!: ElementRef<HTMLInputElement>;
+
+  selectedFile?: File;
 
   message = '';
   success = false;
@@ -76,12 +79,18 @@ export class Students implements OnInit {
       next: (res) => {
         this.success = true;
         this.message = res?.message || 'Students uploaded successfully.';
+        // Clear selected file
+        this.selectedFile = undefined;
+        // Clear file input
+        this.fileInput.nativeElement.value = '';
         this.loadStudents();
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error(err);
         this.success = false;
         this.message = err?.error?.message || 'Upload failed. Please check the Excel file.';
+        this.cdr.detectChanges();
       },
     });
   }

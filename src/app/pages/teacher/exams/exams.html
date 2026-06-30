@@ -8,12 +8,12 @@
       <h2>Exam Management</h2>
     </div>
 
-    <div *ngIf="exams.length === 0" class="no-data">No Exams Found</div>
+    <!-- <div *ngIf="filteredExams.length === 0" class="no-data">No Exams Found</div> -->
 
     <table *ngIf="exams.length > 0">
       <thead>
         <tr>
-          <th style="display: none;">ID</th>
+          <th style="display: none">ID</th>
           <th>Exam Name</th>
           <th>Class</th>
           <th>Description</th>
@@ -22,15 +22,78 @@
           <th>Status</th>
           <th>Actions</th>
         </tr>
-      </thead>
+        <tr class="filter-row">
+          <th style="display: none"></th>
 
+          <th>
+            <input
+              type="text"
+              [(ngModel)]="examNameFilter"
+              (input)="filterExams()"
+              placeholder="Search"
+            />
+          </th>
+
+          <th>
+            <input
+              type="text"
+              [(ngModel)]="classFilter"
+              (input)="filterExams()"
+              placeholder="Search"
+            />
+          </th>
+
+          <th>
+            <input
+              type="text"
+              [(ngModel)]="descriptionFilter"
+              (input)="filterExams()"
+              placeholder="Search"
+            />
+          </th>
+
+          <th>
+            <input
+              type="text"
+              [(ngModel)]="durationFilter"
+              (input)="filterExams()"
+              placeholder="Search"
+            />
+          </th>
+
+          <th>
+            <input
+              type="text"
+              [(ngModel)]="totalMarksFilter"
+              (input)="filterExams()"
+              placeholder="Search"
+            />
+          </th>
+
+          <th>
+            <input
+              type="text"
+              [(ngModel)]="statusFilter"
+              (input)="filterExams()"
+              placeholder="Search"
+            />
+          </th>
+
+          <th></th>
+        </tr>
+      </thead>
       <tbody>
-        <tr *ngFor="let exam of exams">
-          <td style="display: none;">{{ exam.id }}</td>
+        <tr colspan="8" *ngIf="filteredExams.length === 0" class="loading">
+          No Exams Found
+        </tr>
+      </tbody>
+      <tbody>
+        <tr *ngFor="let exam of filteredExams">
+          <td style="display: none">{{ exam.id }}</td>
 
           <td>{{ exam.examName }}</td>
 
-          <td>{{exam.className}} </td>
+          <td>{{ exam.className }}</td>
 
           <td>{{ exam.description }}</td>
 
@@ -39,7 +102,10 @@
           <td>{{ exam.totalMarks }}</td>
 
           <td>
-            <span [class.status-active]="exam.status === 'ACTIVE'" [class.status-inactive]="exam.status !== 'ACTIVE'">
+            <span
+              [class.status-active]="exam.status === 'ACTIVE'"
+              [class.status-inactive]="exam.status !== 'ACTIVE'"
+            >
               {{ exam.status }}
             </span>
           </td>
@@ -49,7 +115,11 @@
               ✎
             </button>
 
-            <button class="icon-btn upload-btn" (click)="uploadQuestions(exam)" title="Upload Questions">
+            <button
+              class="icon-btn upload-btn"
+              (click)="uploadQuestions(exam)"
+              title="Upload Questions"
+            >
               ⬆
             </button>
 
@@ -61,13 +131,14 @@
               📈
             </button>
 
-            <button class="icon-btn status-btn" (click)="toggleStatus(exam)" [title]="exam.status === 'ACTIVE' ? 'Deactivate Exam' : 'Activate Exam'">
+            <button
+              class="icon-btn status-btn"
+              (click)="toggleStatus(exam)"
+              [title]="exam.status === 'ACTIVE' ? 'Deactivate Exam' : 'Activate Exam'"
+            >
               {{ exam.status === 'ACTIVE' ? '✖' : '✓' }}
             </button>
 
-            <button class="icon-btn delete-btn" (click)="deleteExam(exam.id)" title="Delete Exam">
-              🗑
-            </button>
           </td>
         </tr>
       </tbody>

@@ -1,5 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
+import {
+  ConfirmDialogService,
+  ConfirmDialogData
+} from '../../core/services/confirm-dialog.service';
 
 @Component({
   selector: 'app-confirm-dialog',
@@ -9,25 +14,17 @@ import { CommonModule } from '@angular/common';
   styleUrl: './confirm-dialog.scss',
 })
 export class ConfirmDialog {
-  @Input() visible = false;
 
-  @Input() title = 'Confirmation';
+  dialogService = inject(ConfirmDialogService);
 
-  @Input() message = 'Are you sure?';
-
-  @Input() confirmText = 'Yes';
-
-  @Input() cancelText = 'Cancel';
-
-  @Output() confirmed = new EventEmitter<void>();
-
-  @Output() cancelled = new EventEmitter<void>();
+  dialogData$: Observable<ConfirmDialogData> =
+    this.dialogService.dialogData$;
 
   confirm() {
-    this.confirmed.emit();
+    this.dialogService.onConfirm();
   }
 
   cancel() {
-    this.cancelled.emit();
+    this.dialogService.onCancel();
   }
 }

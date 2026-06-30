@@ -5,11 +5,12 @@ import { ActivatedRoute } from '@angular/router';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { Sidebar } from '../../../shared/sidebar/sidebar';
 import { TeacherService } from '../../../core/services/teacher.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-results',
   standalone: true,
-  imports: [CommonModule, Navbar, Sidebar],
+  imports: [CommonModule, FormsModule, Navbar, Sidebar],
   templateUrl: './results.html',
   styleUrl: './results.scss',
 })
@@ -24,6 +25,15 @@ export class Results implements OnInit {
 
   results: any[] = [];
   exam: any;
+
+  filterResults: any[] = [];
+  
+  rollNoFilter: string = '';
+  studentNameFilter: string = '';
+  sectionFilter: string = '';
+  scoreFilter: string = '';
+  examStatusFilter: string = '';
+  statusFilter: string = '';
 
   ngOnInit(): void {
     this.examId = Number(this.route.snapshot.paramMap.get('examId'));
@@ -44,6 +54,7 @@ export class Results implements OnInit {
       next: (data) => {
         this.results = Array.isArray(data) ? data : [];
         this.loading = false;
+        this.filterResults = [...this.results];
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -95,5 +106,16 @@ export class Results implements OnInit {
         this.cdr.detectChanges();
       },
     });
+  }
+
+  filterResult() {
+    this.filterResults = this.results.filter(
+      (result) =>
+        (result.rollNo ?? '').toLowerCase().includes(this.rollNoFilter.toLowerCase()) &&
+        (result.studentName ?? '').toLowerCase().includes(this.studentNameFilter.toLowerCase()) &&
+        (result.sectionName ?? '').toLowerCase().includes(this.sectionFilter.toLowerCase()) &&
+        String(result.marksObtained ?? '').includes(this.scoreFilter) &&
+        (result.examStatus ?? '').toLowerCase().includes(this.examStatusFilter.toLowerCase()),
+    );
   }
 }

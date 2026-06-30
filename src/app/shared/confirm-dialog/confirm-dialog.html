@@ -1,18 +1,23 @@
-<p>confirm-dialog works!</p>
-<div class="overlay" *ngIf="visible">
-  <div class="dialog">
-    <h2>{{ title }}</h2>
+<ng-container *ngIf="dialogData$ | async as dialogData">
+  <div class="overlay" *ngIf="dialogData.visible">
+    <div class="dialog">
+      <h2>{{ dialogData.title }}</h2>
 
-    <p>{{ message }}</p>
+      <p>{{ dialogData.message }}</p>
 
-    <div class="buttons">
-      <button class="cancel-btn" (click)="cancel()">
-        {{ cancelText }}
-      </button>
+      <div class="buttons">
+        <button
+          *ngIf="dialogData.cancelText"
+          class="cancel-btn"
+          (click)="cancel()"
+        >
+          {{ dialogData.cancelText }}
+        </button>
 
-      <button class="confirm-btn" (click)="confirm()">
-        {{ confirmText }}
-      </button>
+        <button class="confirm-btn" (click)="confirm()">
+          {{ dialogData.confirmText }}
+        </button>
+      </div>
     </div>
   </div>
-</div>
+</ng-container>
